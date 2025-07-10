@@ -19,7 +19,7 @@ services:
     networks:
       - appnet
 
- nginx:
+  nginx:
     image: nginx:alpine
     expose:
       - "80"
