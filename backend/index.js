@@ -37,9 +37,9 @@ function logSession(name, msg) {
 }
 function updateSessionStatus(name, status) {
   const t = Date.now();
-  db.run(\`INSERT INTO sessions(session_name,status,last_updated)
+  db.run(`INSERT INTO sessions(session_name,status,last_updated)
           VALUES(?,?,?)
-          ON CONFLICT(session_name) DO UPDATE SET status=excluded.status,last_updated=excluded.last_updated\`,
+          ON CONFLICT(session_name) DO UPDATE SET status=excluded.status,last_updated=excluded.last_updated`,
     [name, status, t]);
 }
 
@@ -66,8 +66,8 @@ function startSession(name) {
     const chat = await msg.getChat();
     const chatId = msg.fromMe ? msg.to : msg.from;
     const sender = msg.fromMe ? 'me' : msg.from;
-    db.run(\`INSERT INTO messages(session_name,chat_id,sender,message,timestamp)
-            VALUES(?,?,?,?,?)\`, [name, chatId, sender, msg.body, msg.timestamp]);
+    db.run(`INSERT INTO messages(session_name,chat_id,sender,message,timestamp)
+            VALUES(?,?,?,?,?)`, [name, chatId, sender, msg.body, msg.timestamp]);
 
     if (!msg.fromMe) {
       await chat.sendState('typing');
