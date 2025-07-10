@@ -19,13 +19,13 @@ services:
     networks:
       - appnet
 
-  nginx:
+ nginx:
     image: nginx:alpine
-    ports:
-      - "8081:80"
+    expose:
+      - "80"
     volumes:
       - ./public:/var/www/html
-       - ./nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d
     depends_on:
       - php
       - node-app
