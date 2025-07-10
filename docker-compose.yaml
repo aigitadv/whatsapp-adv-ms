@@ -1,14 +1,33 @@
 version: "3.8"
-
 services:
-  app:
+  node-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: whatsapp-node
-    ports:
-      - "3000:3000"
     volumes:
       - ./backend:/app/backend
-      - ./public:/app/public
-    working_dir: /app/backend
+    expose:
+      - "3000"
+    networks:
+      - appnet
+
+  php:
+    image: php:8.1-fpm
+    volumes:
+      - ./public:/var/www/html
+      - ./public/messages.db:/var/www/html/messages.db
+    networks:
+      - appnet
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80"
+    volumes:
+      - ./public:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - appnet
+
+networks:
+  appnet:
