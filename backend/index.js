@@ -127,4 +127,8 @@ app.post('/send-message', async (req, res) => {
   } catch (e) { res.status(500).send(e.message); }
 });
 
+app.get('/status', (req, res) => {
+  res.send('OK');
+});
+
 app.listen(3000, () => console.log('Server avviato su http://localhost:3000'));
