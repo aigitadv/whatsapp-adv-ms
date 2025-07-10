@@ -57,7 +57,7 @@ function startSession(name) {
   client.on('ready', () => { logSession(name, '✅ Pronto'); updateSessionStatus(name, 'ready'); });
   client.on('auth_failure', () => { logSession(name, '❌ Auth failure'); updateSessionStatus(name, 'auth_failure'); });
   client.on('disconnected', reason => {
-    logSession(name, \`⚠️ Disconnesso: \${reason}\`);
+    logSession(name, `⚠️ Disconnesso: ${reason}`);
     updateSessionStatus(name, 'disconnected');
     delete sessions[name];
   });
@@ -74,8 +74,8 @@ function startSession(name) {
       const delay = Math.min(Math.max(msg.body.length * 80, 1000), 8000);
       await new Promise(r => setTimeout(r, delay));
       await chat.sendState('paused');
-      await msg.reply(\`Hai scritto: \${msg.body}\`);
-      logSession(name, \`↩️ Risposta inviata dopo \${delay}ms\`);
+      await msg.reply(`Hai scritto: ${msg.body}`);
+      logSession(name, `↩️ Risposta inviata dopo ${delay}ms`);
     }
   });
 
@@ -88,10 +88,10 @@ app.post('/start-session', (req, res) => {
   if (!sessionName) return res.status(400).send('Nome sessione richiesto');
   if (sessions[sessionName]) return res.status(400).send('Sessione già attiva');
   startSession(sessionName);
-  res.send(\`Sessione \${sessionName} avviata\`);
+  res.send(`Sessione ${sessionName} avviata`);
 });
 app.get('/session-status', (req, res) => {
-  db.all(\`SELECT session_name,status,last_updated FROM sessions\`, [], (e, rows) => {
+  db.all(`SELECT session_name,status,last_updated FROM sessions`, [], (e, rows) => {
     if (e) return res.status(500).send(e.message);
     res.json(rows);
   });
@@ -108,7 +108,7 @@ app.get('/logs', (req, res) => {
 });
 app.get('/chat-history', (req, res) => {
   const { sessionName, chatId } = req.query;
-  db.all(\`SELECT * FROM messages WHERE session_name=? AND chat_id=? ORDER BY timestamp ASC\`, [sessionName, chatId], (e, rows) => {
+  db.all(`SELECT * FROM messages WHERE session_name=? AND chat_id=? ORDER BY timestamp ASC`, [sessionName, chatId], (e, rows) => {
     if (e) return res.status(500).send(e.message);
     res.json(rows);
   });
