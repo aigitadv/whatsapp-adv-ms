@@ -1,10 +1,8 @@
-FROM node:18-alpine
+FROM node:20
 WORKDIR /app
-COPY backend/package*.json ./backend/
-RUN cd backend && npm install --production
+COPY backend/package.json backend/package-lock.json* ./ 
+RUN npm install
 COPY backend ./backend
-COPY public  ./public
-VOLUME [ "/data" ]
-ENV DB_PATH=/data/messages.db
-EXPOSE 3000
-CMD ["node", "backend/index.js"]
+COPY public ./public
+WORKDIR /app/backend
+CMD ["node", "index.js"]
